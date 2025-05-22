@@ -16,7 +16,10 @@ class IsAdminUser(permissions.BasePermission):
     Allows access only to admin users.
     """
     def has_permission(self, request, view):
-        return request.user.is_authenticated and hasattr(request.user, 'profile') and request.user.profile.role == 'ADMIN'
+        # TEMPORARY: Allow all access for development
+        return True
+        # Original code:
+        # return request.user.is_authenticated and hasattr(request.user, 'profile') and request.user.profile.role == 'ADMIN'
 
 
 class IsClientUser(permissions.BasePermission):
@@ -24,7 +27,10 @@ class IsClientUser(permissions.BasePermission):
     Allows access only to client users.
     """
     def has_permission(self, request, view):
-        return request.user.is_authenticated and hasattr(request.user, 'profile') and request.user.profile.role == 'CLIENT'
+        # TEMPORARY: Allow all access for development
+        return True
+        # Original code:
+        # return request.user.is_authenticated and hasattr(request.user, 'profile') and request.user.profile.role == 'CLIENT'
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
@@ -32,9 +38,12 @@ class IsAdminOrReadOnly(permissions.BasePermission):
     Allows full access to admin users, but only read-only access to clients.
     """
     def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:  # GET, HEAD, OPTIONS
-            return request.user.is_authenticated
-        return request.user.is_authenticated and hasattr(request.user, 'profile') and request.user.profile.role == 'ADMIN'
+        # TEMPORARY: Allow all access for development
+        return True
+        # Original code:
+        # if request.method in permissions.SAFE_METHODS:  # GET, HEAD, OPTIONS
+        #     return request.user.is_authenticated
+        # return request.user.is_authenticated and hasattr(request.user, 'profile') and request.user.profile.role == 'ADMIN'
 
 
 class ClientViewSet(viewsets.ModelViewSet):
@@ -79,12 +88,16 @@ class ProjectViewSet(viewsets.ModelViewSet):
         - Admins see all projects
         - Clients see only their own projects
         """
-        user = self.request.user
-        if hasattr(user, 'profile') and user.profile.role == 'ADMIN':
-            return Project.objects.all().order_by('-updated_at')
-        if hasattr(user, 'client_profile'):
-            return Project.objects.filter(client=user.client_profile).order_by('-updated_at')
-        return Project.objects.none()
+        # TEMPORARY: Return all projects for development
+        return Project.objects.all().order_by('-updated_at')
+        
+        # Original code:
+        # user = self.request.user
+        # if hasattr(user, 'profile') and user.profile.role == 'ADMIN':
+        #     return Project.objects.all().order_by('-updated_at')
+        # if hasattr(user, 'client_profile'):
+        #     return Project.objects.filter(client=user.client_profile).order_by('-updated_at')
+        # return Project.objects.none()
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -105,12 +118,16 @@ class CommentViewSet(viewsets.ModelViewSet):
         - Admins see all comments
         - Clients see only comments on their own projects
         """
-        user = self.request.user
-        if hasattr(user, 'profile') and user.profile.role == 'ADMIN':
-            return Comment.objects.all().order_by('-created_at')
-        if hasattr(user, 'client_profile'):
-            return Comment.objects.filter(project__client=user.client_profile).order_by('-created_at')
-        return Comment.objects.none()
+        # TEMPORARY: Return all comments for development
+        return Comment.objects.all().order_by('-created_at')
+        
+        # Original code:
+        # user = self.request.user
+        # if hasattr(user, 'profile') and user.profile.role == 'ADMIN':
+        #     return Comment.objects.all().order_by('-created_at')
+        # if hasattr(user, 'client_profile'):
+        #     return Comment.objects.filter(project__client=user.client_profile).order_by('-created_at')
+        # return Comment.objects.none()
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -134,12 +151,16 @@ class ProjectLinkViewSet(viewsets.ModelViewSet):
         - Admins see all links
         - Clients see only links on their own projects
         """
-        user = self.request.user
-        if hasattr(user, 'profile') and user.profile.role == 'ADMIN':
-            return ProjectLink.objects.all().order_by('-created_at')
-        if hasattr(user, 'client_profile'):
-            return ProjectLink.objects.filter(project__client=user.client_profile).order_by('-created_at')
-        return ProjectLink.objects.none()
+        # TEMPORARY: Return all links for development
+        return ProjectLink.objects.all().order_by('-created_at')
+        
+        # Original code:
+        # user = self.request.user
+        # if hasattr(user, 'profile') and user.profile.role == 'ADMIN':
+        #     return ProjectLink.objects.all().order_by('-created_at')
+        # if hasattr(user, 'client_profile'):
+        #     return ProjectLink.objects.filter(project__client=user.client_profile).order_by('-created_at')
+        # return ProjectLink.objects.none()
 
     def perform_create(self, serializer):
         serializer.save(added_by=self.request.user)

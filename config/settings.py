@@ -122,13 +122,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # REST_FRAMEWORK Settings (Add this section at the end)
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # Add authentication methods later, e.g., TokenAuthentication
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # TEMPORARY: Commented out for development - uncomment for production
+        # 'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        # Start with fairly open permissions for easier development, tighten later
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        # TEMPORARY: Allow all access for development - change for production
+        'rest_framework.permissions.AllowAny',
+        # Original setting:
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10, # Optional: Add default pagination
